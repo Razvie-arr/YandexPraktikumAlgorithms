@@ -27,18 +27,17 @@ public class Neighbors {
 
         int X = Integer.parseInt(reader.readLine());
         int Y = Integer.parseInt(reader.readLine());
-        if (X < n & Y < m) {
-            if (X+1 < n & X != n-1)
-                output_buffer.append(twoDimArray[X+1][Y]).append(" ");
-
-            if (X != 0)
-            output_buffer.append(twoDimArray[X-1][Y]).append(" ");
-
-            if (Y+1 < m & Y != m-1)
-                output_buffer.append(twoDimArray[X][Y+1]).append(" ");
-
-            if (Y != 0)
-            output_buffer.append(twoDimArray[X][Y-1]).append(" ");
+        if ((X < n & Y < m) && (X >= 0 && Y >= 0)) {
+            if (X + 1 < n & X != n - 1)
+                output_buffer.append(twoDimArray[X + 1][Y]).append(" ");
+            if (X != 0) {
+                output_buffer.append(twoDimArray[X - 1][Y]).append(" ");
+            }
+            if (Y + 1 < m & Y != m - 1)
+                output_buffer.append(twoDimArray[X][Y + 1]).append(" ");
+            if (Y != 0) {
+                output_buffer.append(twoDimArray[X][Y - 1]).append(" ");
+            }
         }
 
         String output_string = output_buffer.toString();
@@ -48,6 +47,4 @@ public class Neighbors {
             System.out.print(numArr[i] + " ");
         }
     }
-
-
 }
