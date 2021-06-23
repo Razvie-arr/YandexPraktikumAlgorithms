@@ -12,14 +12,16 @@ public class LongestWord {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int L = Integer.parseInt(reader.readLine());
         String words = reader.readLine();
+        if (!words.matches("[a-z ]*")) {
+            System.exit(0);
+        }
         findLongestWord(L, words);
     }
 
     public static void findLongestWord(int L, String words) {
-        if (L >= 100000) {
+        if (L > 100000) {
             System.exit(0);
         }
-
         if (words.length() != L) {
             System.exit(0);
         }
@@ -31,7 +33,8 @@ public class LongestWord {
         String longestWord = Arrays.stream(words.split(" ")).max(Comparator.comparingInt(String::length)).orElse(null);
         if (longestWord != null)
         {
-            System.out.print(longestWord + "\n" + longestWord.length());
+            System.out.println(longestWord);
+            System.out.print(longestWord.length());
         }
 
     }
