@@ -36,19 +36,38 @@ public class ClosestZero {
             System.exit(0);
         }
         //сравниваем длину HashSet с длиной массива, который не включает в себя нули, если эти длины не равны, значит есть неуникальные элементы
-        int lenghtofSet = uniqHouseNumbers.size();
         int withoutZeroCounter = 0;
         for(int i = 0; i < HouseNumbersWithoutZero.size(); i++) {
            withoutZeroCounter += 1;
         }
-        if (withoutZeroCounter != lenghtofSet) {
+        if (withoutZeroCounter != uniqHouseNumbers.size()) {
             System.exit(0);
         }
         findClosestZero(HouseNumbers);
     }
-    public static void findClosestZero(int[] HouseNumbers) {
-        for (int i : HouseNumbers) {
-            System.out.println(i);
+    public static void findClosestZero(int[] input) {
+        int input_lenght = input.length;
+        int[] left = new int[input_lenght];
+        int[] right = new int[input_lenght];
+        int[] result = new int[input_lenght];
+
+        for (int i = 0; i < input_lenght; i++)
+        {
+            left[i] = input[i] == 0 ? 0 : input_lenght;
+            right[i] = input[i] == 0 ? 0 : input_lenght;
         }
+
+        for (int i = 1; i < input_lenght; i++)
+            left[i] = input[i] == 0 ? 0 : left[i - 1] + 1;
+
+        for (int i = input_lenght - 2; i >= 0; i--)
+            right[i] = input[i] == 0 ? 0 : right[i + 1] + 1;
+
+        for (int i = 0; i < input_lenght; i++)
+        {
+            result[i] = Math.min(left[i], right[i]);
+            System.out.print(result[i] + " ");
+        }
+
     }
 }
