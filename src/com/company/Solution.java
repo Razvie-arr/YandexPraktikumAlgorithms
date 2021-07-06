@@ -22,11 +22,27 @@ public class Solution {
             if (size > 1000) {
                 throw new Exception();
             }
+            //заполняем указатель на пред элемент для каждого элемента
+            Node<String> prev = null;
+            for (Node<String> n = head; n != null; n = n.next) {
+                n.prev = prev;
+                prev = n;
+            }
+            Node<String> tail = null;
             for (Node<String> n = head; n != null; n = n.next) {
                 if (n.next == null) {
-                    n = head;
+                    tail = n;
                 }
-                n.prev = n.next;
+            }
+            head = tail;
+            Node<String> p = head;
+
+            Node<String> temp;
+            while(p != null) {
+                temp = p.next;
+                p.next = p.prev;
+                p.prev = temp;
+                p = p.next;
             }
             return head;
         }
@@ -35,15 +51,15 @@ public class Solution {
         }
     }
 
-        public static void main(String[] args) {
-            Node<String> node3 = new Node<>("node3", null, null);
-            Node<String> node2 = new Node<>("node2", node3, null);
-            Node<String> node1 = new Node<>("node1", node2, null);
-            Node<String> node0 = new Node<>("node0", node1, null);
-            Node<String> newNode = solution(node0);
-            for (Node<String> n = newNode; n != null; n = n.next) {
-                System.out.println(n.value);
-            }
+    public static void main(String[] args) {
+        Node<String> node3 = new Node<>("node3", null, null);
+        Node<String> node2 = new Node<>("node2", node3, null);
+        Node<String> node1 = new Node<>("node1", node2, null);
+        Node<String> node0 = new Node<>("node0", node1, null);
+        Node<String> newNode = solution(node0);
+        for (Node<String> n = newNode; n != null; n = n.next) {
+            System.out.println(n.value);
+        }
         /*
         result is : newNode == node3
         node3.next == node2
@@ -53,6 +69,6 @@ public class Solution {
         node1.prev == node2
         node0.prev == node1
         */
-        }
     }
+}
 
