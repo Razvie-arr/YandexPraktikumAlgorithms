@@ -11,18 +11,12 @@ public class StackMaxEffective {
         if (n > 100000) {
             throw new Exception();
         }
-        int maxElem = 0;
         Stack<Integer> stack = new Stack<>();
         Stack<Integer> stackMax = new Stack<>();
         for (int i = 0; i < n; i++) {
             String command = reader.readLine();
             if (command.equals("get_max")) {
-                if (stack.size() == 0) {
-                    System.out.println("None");
-                }
-                else {
-                    System.out.println(maxElem);
-                }
+                System.out.println(getMax(stackMax));
             }
             else if (command.equals("pop")) {
                 if (stack.size() == 0) {
@@ -30,20 +24,17 @@ public class StackMaxEffective {
                 }
                 else {
                     int deleted = stack.pop();
-                    if (deleted == maxElem && stack.size() != 0) {
-                        maxElem = getMax(stack);
+                    String max = getMax(stackMax);
+                    if (!max.equals("None") && deleted == Integer.parseInt(max)) {
+                        stackMax.pop();
                     }
                 }
             }
             else if (command.contains("push")) {
                 int number = findNumberInCommand(command);
-                if (stack.size() == 0) {
-                    maxElem = number;
-                }
-                else {
-                    if (number >= maxElem) {
-                        stackMax.push(number);
-                    }
+                String max = getMax(stackMax);
+                if (!max.equals("None") && number >= Integer.parseInt(max)) {
+                    stackMax.push(number);
                 }
                 stack.push(number);
             }
@@ -54,14 +45,14 @@ public class StackMaxEffective {
         return Integer.parseInt(splittedCommand[1]);
     }
 
-    public static int getMax(Stack<Integer> stack) {
-            int max = stack.get(0);
-            for (int i = 0; i < stack.size(); i++) {
-                if (stack.get(i) > max) {
-                    max = stack.get(i);
-                }
-            }
-            return max;
+    public static String getMax(Stack<Integer> stackMax) {
+        if (stackMax.size() == 0) {
+            return "None";
+        }
+        else {
+            return stackMax.peek().toString();
+        }
+
     }
 
 }
