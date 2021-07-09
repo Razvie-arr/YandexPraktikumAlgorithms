@@ -16,43 +16,40 @@ public class StackMaxEffective {
         for (int i = 0; i < n; i++) {
             String command = reader.readLine();
             if (command.equals("get_max")) {
-                System.out.println(getMax(stackMax));
+                if (stack.size() == 0) {
+                    System.out.println("None");
+                }
+                else {
+                    System.out.println(stackMax.peek());
+                }
             }
             else if (command.equals("pop")) {
                 if (stack.size() == 0) {
                     System.out.println("error");
                 }
                 else {
-                    int deleted = stack.pop();
-                    String max = getMax(stackMax);
-                    if (!max.equals("None") && deleted == Integer.parseInt(max)) {
-                        stackMax.pop();
-                    }
+                    stack.pop();
+                    stackMax.pop();
                 }
             }
             else if (command.contains("push")) {
                 int number = findNumberInCommand(command);
-                String max = getMax(stackMax);
-                if (!max.equals("None") && number >= Integer.parseInt(max)) {
+                stack.push(number);
+                if (stack.size() == 1) {
                     stackMax.push(number);
                 }
-                stack.push(number);
+                if (stackMax.peek() < number) {
+                    stackMax.push(number);
+                }
+                else {
+                    stackMax.push(stackMax.peek());
+                }
             }
         }
     }
     public static int findNumberInCommand(String command) {
         String[] splittedCommand = command.split(" ");
         return Integer.parseInt(splittedCommand[1]);
-    }
-
-    public static String getMax(Stack<Integer> stackMax) {
-        if (stackMax.size() == 0) {
-            return "None";
-        }
-        else {
-            return stackMax.peek().toString();
-        }
-
     }
 
 }
