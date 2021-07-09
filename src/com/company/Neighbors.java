@@ -16,7 +16,7 @@ public class Neighbors {
         int n = Integer.parseInt(reader.readLine());
         int m = Integer.parseInt(reader.readLine());
 
-        int twoDimArray[][] = new int[n][m];
+        int[][] twoDimArray = new int[n][m];
 
         for (int i = 0; i < n; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
