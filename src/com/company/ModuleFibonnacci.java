@@ -2,6 +2,7 @@
 
     import java.io.BufferedReader;
     import java.io.InputStreamReader;
+    import java.math.BigInteger;
 
     public class ModuleFibonnacci {
         public static void main(String[] args) throws Exception {
@@ -15,8 +16,8 @@
             if (k < 1 || k > 8) {
                 throw new Exception();
             }
-            int internCommits = getInternCommits(n);
-            int internCommitsDigits = (int)(Math.log10(n) + 1);
+            BigInteger internCommits = getInternCommits(n);
+            int internCommitsDigits = (int)(Math.log10(internCommits.doubleValue()) + 1);
             if (internCommitsDigits < k) {
                 System.out.print(internCommits);
             }
@@ -24,22 +25,22 @@
                 System.out.print(getKSymbols(internCommits, k));
             }
         }
-        private static int getInternCommits(int n) {
+        private static BigInteger getInternCommits(int n) {
             if (n == 0 || n == 1) {
-                return 1;
+                return BigInteger.valueOf(1);
             }
-            int previous = -1;
-            int result = 1;
+            BigInteger sum = BigInteger.valueOf(1);
+            BigInteger prev = BigInteger.valueOf(1);
 
-            for (int i = 0; i <= n; i++) {
-                int sum = result + previous;
-                previous = result;
-                result = sum;
+            for (int i = 1; i < n; i++) {
+                sum = prev.add(sum);
+                prev = sum.subtract(prev);
             }
 
-            return result;
+            return sum;
         }
-        private static int getKSymbols(int commits, int k) {
-            return (int) (commits % Math.pow(10, k));
+        private static BigInteger getKSymbols(BigInteger commits, int k) {
+            BigInteger powedK = BigInteger.valueOf((long) Math.pow(10, k));
+            return commits.mod(powedK);
         }
     }
