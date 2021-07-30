@@ -16,7 +16,7 @@ public class Calculator {
                 deque.add(Integer.parseInt(splitExpression[i]));
             }
             else {
-                System.out.println(doProcessing(splitExpression[i], deque));
+                doProcessing(splitExpression[i], deque);
             }
         }
     }
@@ -30,40 +30,30 @@ public class Calculator {
         }
     }
 
-    public static int doProcessing(String s, ArrayDeque<Integer> deque) {
+    public static void doProcessing(String s, ArrayDeque<Integer> deque) {
         try {
             if (s.equals("+")) {
                 int additionAccum = deque.pollFirst() + deque.pollFirst();
-                deque.pollFirst();
-                if (!deque.isEmpty()) {
-                    doProcessing(s, deque);
-                }
-                return additionAccum;
+                deque.add(additionAccum);
             }
 
             if (s.equals("-")) {
                 int subtractAccum = deque.pollFirst() - deque.pollFirst();
-                deque.pollFirst();
-                return subtractAccum;
+                deque.add(subtractAccum);
             }
 
             if (s.equals("*")) {
                 int multiplyAccum = deque.pollFirst() * deque.pollFirst();
-                deque.pollFirst();
-                return multiplyAccum;
+                deque.add(multiplyAccum);
             }
 
             if (s.equals("/")) {
                 int divideAccum = deque.pollFirst() / deque.pollFirst();
-                deque.pollFirst();
-                return divideAccum;
+                deque.add(divideAccum);
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
     }
 }
