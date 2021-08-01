@@ -1,5 +1,3 @@
-package com.company;
-
 public class FromPikabu {
     public static void main(String[] args) {
         String input = "AAAABBBBCCCCCCCDDDDDE";

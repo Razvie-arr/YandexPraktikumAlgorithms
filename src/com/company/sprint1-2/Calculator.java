@@ -21,7 +21,6 @@ https://contest.yandex.ru/contest/22781/run-report/52269616/
 Входной стек содержит k элементов и имеет сложность O(k), на выходе получается стек с 1 элементом и имеющим сложность O(1).
 */
 
-package com.company;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Stack;

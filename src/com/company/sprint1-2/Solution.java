@@ -1,5 +1,3 @@
-package com.company;
-
 class Node<V> {
     public V value;
     public Node<V> next;
