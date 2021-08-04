@@ -15,20 +15,18 @@ public class Сombinations {
         keysMap.put(6, "mno");
         keysMap.put(7, "pqrs");
         keysMap.put(8, "tuv");
-        keysMap.put(9, "wxyz");
+        keysMap.put(9, "wxys");
         phoneCombinations(reader.readLine(), keysMap);
     }
 
     public static void phoneCombinations(String inputKeys, Map <Integer, String> keysMap) throws Exception {
         validateKeys(inputKeys);
+        ArrayList<String> values = new ArrayList<>();
         int[] inputKeysArr = Arrays.stream(inputKeys.split("")).mapToInt(Integer::parseInt).toArray();
-        String[] first = (keysMap.get(inputKeysArr[0])).split("");
-        String[] second = (keysMap.get(inputKeysArr[1])).split("");
-        for (int i = 0; i < first.length; i++) {
-            for (int j = 0; j < second.length; j++) {
-                System.out.print(first[i] + "" + second[j] + " ");
-            }
+        for (int j : inputKeysArr) {
+            values.add(keysMap.get(j));
         }
+        System.out.print(values);
     }
 
     public static void validateKeys(String keys) throws Exception {
