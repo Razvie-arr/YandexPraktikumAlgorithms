@@ -1,13 +1,25 @@
 package com.company.sprint3;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 
-class BiggestNumber {
-    public static void main(String[] args) {
-        int[] nums = new int[]{2, 4, 5, 2, 10};
+public class BiggestNumber {
+    public static void main(String[] args) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(reader.readLine());
+        if (n > 100) {
+            throw new Exception();
+        }
+        String numbers = reader.readLine();
+        int[] numArr = Arrays.stream(numbers.split(" ")).mapToInt(Integer::parseInt).toArray();
+        if (numArr.length != n) {
+            throw new Exception();
+        }
         BiggestNumber biggy = new BiggestNumber();
-        System.out.print(biggy.largestNumber(nums));
+        System.out.print(biggy.largestNumber(numArr));
     }
+
     public String largestNumber(int[] nums) {
         String [] s = new String [nums.length];
         int len=0;
@@ -21,7 +33,7 @@ class BiggestNumber {
         }
         if (!hasNonZero) return "0";
 
-        Arrays.sort(s, (a, b) -> this.compare(b,a));
+        Arrays.sort(s, BiggestNumber::compare);
         StringBuilder sb = new StringBuilder(len);
         for (String t : s) {
             sb.append(t);
@@ -29,8 +41,6 @@ class BiggestNumber {
         return sb.toString();
     }
 
-    // AB ABY ==> ABABY vs ABYAB
-    // AB > ABY if A > Y 
     private static int compare(String a, String b) {
         int a_len = a.length();
         int b_len = b.length();
