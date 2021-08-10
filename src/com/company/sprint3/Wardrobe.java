@@ -12,34 +12,38 @@ public class Wardrobe {
             throw new Exception();
         }
         String thingColors = reader.readLine();
+        if (thingColors.equals("")) {
+            return;
+        }
+        if (thingColors.length() == 1) {
+            System.out.println(thingColors);
+            return;
+        }
         int[] colorsArr = Arrays.stream(thingColors.split(" ")).mapToInt(Integer::parseInt).toArray();
         if (colorsArr.length != n) {
             throw new Exception();
         }
-
-        System.out.println(Arrays.toString(countingSort(colorsArr, 2)));
+        StringBuilder out = new StringBuilder();
+        int[] sortedArray = countingSort(colorsArr, 3);
+        for (int i = 0; i < sortedArray.length; i++) {
+            out.append(sortedArray[i]).append(" ");
+        }
+        System.out.println(out);
     }
 
-    public static int[] countingSort(int[] arr, int k) {
-        int[] countedValues = new int[k + 1];
+    public static int[] countingSort(int[] arr, int k) throws Exception {
+        int[] countedValues = new int[k];
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == 0) {
-                countedValues[0]++;
-            }
-            else if (arr[i] == 1) {
-                countedValues[1]++;
-            }
-            else if (arr[i] == 2) {
-                countedValues[2]++;
-            }
+            countedValues[arr[i]]++;
         }
-
         int index = 0;
-        for (int i = 0; i < k ; i++) {
-            for (int j = 0; j < arr.length; j++) {
-                if (arr[i])
+        int[] sortedArr = new int[arr.length];
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < countedValues[i]; j++) {
+                sortedArr[index] = i;
+                index++;
             }
         }
-        return arr;
+        return sortedArr;
     }
 }
