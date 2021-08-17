@@ -36,7 +36,7 @@ public class Solution {
                 int midToRight = brokenSearch(Arrays.copyOfRange(arr, mid, right + 1), k);
 
                 if (midToRight != -1) {
-                    return midToRight + mid + 1;
+                    return midToRight + mid;
                 }
                 else {
                     return -1;
@@ -46,9 +46,8 @@ public class Solution {
 
         return -1;
     }
-
     public static void main(String[] args) {
-        int[] arr = {19, 21, 100, 101, 1, 4, 5, 7, 12};
-        System.out.println(brokenSearch(arr, 5));
+        int[] arr = {1, 5, 10, 15, 20, 50};
+        System.out.println(brokenSearch(arr, 4));
     }
 }
