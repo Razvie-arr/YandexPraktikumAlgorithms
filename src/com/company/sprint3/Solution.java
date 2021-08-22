@@ -6,40 +6,44 @@ public class Solution {
     public static int brokenSearch(int[] arr, int k) { ;
         int left = 0;
         int right = arr.length - 1;
-        int mid = arr.length / 2;
+        int mid = (left + right) / 2;
         if (arr[mid] == k) {
             return mid;
         }
         else if (arr.length == 1) {
             if (arr[0] == k) {
-                return k;
+                return mid;
+            }
+        }
+        else if (arr.length == 2) {
+            if (arr[0] == k) {
+                return 0;
+            }
+            else if (arr[1] == k) {
+                return 1;
             }
         }
         else if (arr[left] <= arr[mid]) {
             if (k <= arr[mid]) {
-                return brokenSearch(Arrays.copyOfRange(arr,0, mid), k);
+                return brokenSearch(Arrays.copyOfRange(arr,left, mid + 1), k);
             }
             else {
-                return brokenSearch(Arrays.copyOfRange(arr, mid, right + 1), k);
+                return brokenSearch(Arrays.copyOfRange(arr, mid + 1, right + 1), k);
             }
         }
         else {
             if (k <= arr[mid]) {
-                right = mid;
-                return brokenSearch(Arrays.copyOfRange(arr,0, right), k);
+                return brokenSearch(Arrays.copyOfRange(arr,left, mid), k);
             }
             else {
-                int leftToMid= brokenSearch(Arrays.copyOfRange(arr,0, mid), k);
+                int leftToMid= brokenSearch(Arrays.copyOfRange(arr,left, mid + 1), k);
                 if (leftToMid != -1) {
-                    return leftToMid;
+                    return leftToMid + left;
                 }
-                int midToRight = brokenSearch(Arrays.copyOfRange(arr, mid, right + 1), k);
+                int midToRight = brokenSearch(Arrays.copyOfRange(arr, mid + 1, right + 1), k);
 
                 if (midToRight != -1) {
-                    return midToRight + mid;
-                }
-                else {
-                    return -1;
+                    return midToRight + mid + 1;
                 }
             }
         }
@@ -47,7 +51,7 @@ public class Solution {
         return -1;
     }
     public static void main(String[] args) {
-        int[] arr = {1, 5, 10, 15, 20, 50};
-        System.out.println(brokenSearch(arr, 4));
+        int[] arr = {1, 2, 3, 5, 6, 7, 9, 0};
+        System.out.println(brokenSearch(arr, 3));
     }
 }
