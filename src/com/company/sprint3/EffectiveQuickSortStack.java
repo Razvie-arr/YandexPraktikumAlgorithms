@@ -48,16 +48,25 @@ public class EffectiveQuickSortStack {
         if (n < 1 || n > 100000) {
             throw new Exception("invalid n");
         }
-        HashMap<Integer, HashMap<String, String> participants = new HashMap<>();
+//        String[] names = new String[n];
+//        int[] solved = new int[n];
+//        int[] penalty = new int[n];
+//        for (int i = 0; i < n; i++) {
+//            String[] participant = reader.readLine().split(" ");
+//            names[i] = participant[0];
+//            solved[i] = Integer.parseInt(participant[1]);
+//            penalty[i] = Integer.parseInt(participant[2]);
+//        }
+//
+//        System.out.println("names: " + Arrays.toString(names) + ", solved: " + Arrays.toString(solved) + ", penalty: " + Arrays.toString(penalty));
+        HashMap<String, ArrayList<Integer>> participants = new HashMap<>();
         for (int i = 0; i < n; i++) {
-            String[] participant = reader.readLine().split(" ");
-            HashMap<String, String> name = new HashMap<>();
-            name.put("name", participant[0]);
-            HashMap<String, Integer> solved = new HashMap<>();
-            solved.put("solved", Integer.parseInt(participant[1]);
-            HashMap<String, Integer> penalty = new HashMap<>();
-            penalty.put("penalty", Integer.parseInt(participant[2]);
-            participants.put(i, )
+            String[] human = reader.readLine().split(" ");
+            ArrayList<Integer> scores = new ArrayList<>();
+            scores.add(Integer.parseInt(human[1]));
+            scores.add(Integer.parseInt(human[2]));
+            participants.put(human[0], scores);
         }
+        System.out.println(participants);
     }
 }
