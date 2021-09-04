@@ -1,10 +1,23 @@
-package com.company.sprint3;
+/*
+https://contest.yandex.ru/contest/23815/run-report/52622049/
 
+-- ПРИНЦИП РАБОТЫ --
+Реализован класс Participant, который позволяет держать в себе имя, количество очков и штрафов участника олимпиады.
+Используется компаратор comp, который осуществляет сравнение по количеству очков и штрафов.
+Реализован рекурсивный метод quickSort, который принимает в себя обьект класса Participant, стартовый индекс и конечный индекс.
+
+
+-- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+Временная сложность как у обычной быстрой сортировки - в среднем 0(n log(n))
+
+-- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+Благодаря модификации быстрой сортировки in-place, алгоритм потребляет 0(k) памяти
+*/
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Answer {
+public class EffectiveQSort {
     public static class Participant {
         private final String name;
         private final int score;
@@ -31,7 +44,7 @@ public class Answer {
 
     public static Comparator<Participant> comp =
             Comparator.comparingInt(Participant::getScore).reversed()
-                    .thenComparingInt(Participant::getPenalty);
+                    .thenComparingInt(Participant::getPenalty).thenComparing(Participant::getName);
 
     public static void quickSort(List<Participant> aList, int start,
                                  int end) {
@@ -49,7 +62,7 @@ public class Answer {
         int i = start + 1;
         int j = end - 1;
         while (true) {
-            while (i <= j && comp.compare(aList.get(i), pivot) <= 0) {
+            while (i <= j && comp.compare(aList.get(i), pivot) < 0) {
                 i++;
             }
             while (i <= j && comp.compare(aList.get(j), pivot) >= 0) {
@@ -71,25 +84,14 @@ public class Answer {
             throw new Exception("invalid n");
         }
         List<Participant> participants = new ArrayList<>();
-        int zeroCounter = 0;
         for (int i = 0; i < n; i++) {
             String[] participant = reader.readLine().split(" ");
             int score = Integer.parseInt(participant[1]);
             int penalty = Integer.parseInt(participant[2]);
             participants.add(new Participant(participant[0], score, penalty));
-            if (score == 0 && penalty == 0) {
-                zeroCounter++;
-            }
         }
         quickSort(participants, 0, participants.size());
-        if (zeroCounter == n && participants.size() != 2) {
-            System.out.println(participants.get(n - 1).getName());
-            for (int i = 0; i < n - 1; i++) {
-                System.out.println(participants.get(i).getName());
-            }
-        } else {
-            participants
-                    .forEach(par -> System.out.println(par.getName()));
-        }
+        participants
+                .forEach(par -> System.out.println(par.getName()));
     }
 }
