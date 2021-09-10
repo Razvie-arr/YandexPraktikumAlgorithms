@@ -17,7 +17,8 @@ public class Sum4 {
         }
         String[] stringArr = reader.readLine().split(" ");
         if (n != stringArr.length) {
-            throw new Exception("n != stringArr.length");
+            System.out.println(0);
+            System.exit(0);
         }
         ArrayList<Integer> x = getIntegerArrayList(stringArr);
         effectiveSolution(s, x);
