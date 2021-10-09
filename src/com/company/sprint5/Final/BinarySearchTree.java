@@ -7,39 +7,14 @@ class BinarySearchTree {
     /* Class containing left
     and right child of current node
     * and key value*/
-    private static class Node {
-        private int value;
-        private Node left;
-        private Node right;
+    class Node {
+        int key;
+        Node left, right;
 
-        Node(Node left, Node right, int value) {
-            this.left = left;
-            this.right = right;
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public Node getRight() {
-            return right;
-        }
-
-        public void setRight(Node right) {
-            this.right = right;
-        }
-
-        public Node getLeft() {
-            return left;
-        }
-
-        public void setLeft(Node left) {
-            this.left = left;
-        }
-
-        public void setValue(int value) {
-            this.value = value;
+        public Node(int item)
+        {
+            key = item;
+            left = right = null;
         }
     }
 
@@ -50,7 +25,7 @@ class BinarySearchTree {
     BinarySearchTree() { root = null; }
 
     // This method mainly calls deleteRec()
-    void deleteKey(int value) { root = deleteRec(root, value); }
+    void deleteKey(int key) { root = deleteRec(root, key); }
 
     /* A recursive function to
     delete an existing key in BST
@@ -62,27 +37,27 @@ class BinarySearchTree {
             return root;
 
         /* Otherwise, recur down the tree */
-        if (key < root.getValue())
-            root.setLeft(deleteRec(root.getLeft(), key));
-        else if (key > root.getValue())
-            root.setRight(deleteRec(root.getRight(), key));
+        if (key < root.key)
+            root.left = deleteRec(root.left, key);
+        else if (key > root.key)
+            root.right = deleteRec(root.right, key);
 
             // if key is same as root's
             // key, then This is the
             // node to be deleted
         else {
             // node with only one child or no child
-            if (root.getLeft() == null)
-                return root.getRight();
-            else if (root.getRight() == null)
-                return root.getLeft();
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
 
             // node with two children: Get the inorder
             // successor (smallest in the right subtree)
-            root.setValue(minValue(root.getRight()));
+            root.key = minValue(root.right);
 
             // Delete the inorder successor
-            root.setRight(deleteRec(root.getRight(), root.getValue()));
+            root.right = deleteRec(root.right, root.key);
         }
 
         return root;
@@ -90,11 +65,11 @@ class BinarySearchTree {
 
     int minValue(Node root)
     {
-        int minv = root.getValue();
-        while (root.getLeft() != null)
+        int minv = root.key;
+        while (root.left != null)
         {
-            minv = root.getLeft().getValue();
-            root = root.getLeft();
+            minv = root.left.key;
+            root = root.left;
         }
         return minv;
     }
@@ -103,21 +78,22 @@ class BinarySearchTree {
     void insert(int key) { root = insertRec(root, key); }
 
     /* A recursive function to
-    insert a new value in BST */
-    Node insertRec(Node root, int value)
+    insert a new key in BST */
+    Node insertRec(Node root, int key)
     {
 
 		/* If the tree is empty,
 		return a new node */
         if (root == null) {
+            root = new Node(key);
             return root;
         }
 
         /* Otherwise, recur down the tree */
-        if (value < root.getValue())
-            root.setLeft(insertRec(root.getLeft(), value));
-        else if (value > root.getValue())
-            root.setRight(insertRec(root.getRight(), value));
+        if (key < root.key)
+            root.left = insertRec(root.left, key);
+        else if (key > root.key)
+            root.right = insertRec(root.right, key);
 
         /* return the (unchanged) node pointer */
         return root;
@@ -130,24 +106,15 @@ class BinarySearchTree {
     void inorderRec(Node root)
     {
         if (root != null) {
-            inorderRec(root.getLeft());
-            System.out.print(root.getValue() + " ");
-            inorderRec(root.getRight());
+            inorderRec(root.left);
+            System.out.print(root.key + " ");
+            inorderRec(root.right);
         }
     }
 
     // Driver Code
     public static void main(String[] args)
     {
-
-//        Node node1 = new Node(null, null, 2);
-//        Node node2 = new Node(node1, null, 3);
-//        Node node3 = new Node(null, node2, 1);
-//        Node node4 = new Node(null, null, 6);
-//        Node node5 = new Node(node4, null, 8);
-//        Node node6 = new Node(node5, null, 10);
-//        Node node7 = new Node(node3, node6, 5);
-//        Node newHead = remove(node7, 10);
         BinarySearchTree tree = new BinarySearchTree();
 
 		/* Let us create following BST

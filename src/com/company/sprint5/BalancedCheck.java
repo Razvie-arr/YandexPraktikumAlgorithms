@@ -1,6 +1,6 @@
 package com.company.sprint5;
 
-public class Solution {
+public class BalancedCheck {
     public static boolean treeSolution(Node head) {
        Result result = isBalancedRecursive(head, -1);
        return result.isBalanced;

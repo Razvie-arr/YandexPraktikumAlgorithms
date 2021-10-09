@@ -1,10 +1,20 @@
+/*
+https://contest.yandex.ru/contest/24810/run-report/53815830/
+-- ПРИНЦИП РАБОТЫ --
+Присутствует класс Participant, хранящий в себе имя, баллы и штрафы каждого участника.
+Используя просеивание вниз конструктируем бинарную кучу и производим сортировку.
+
+-- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+Временная сложность O(n log n)
+
+-- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+В основном используется O(n) для хранения массива, особо дополнительной памяти не требуется.
+ */
 package com.company.sprint5.Final;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class HeapSort {
     public static class Participant {
@@ -32,88 +42,77 @@ public class HeapSort {
     }
 
     public static Comparator<Participant> comp =
-        Comparator.comparingInt(Participant::getScore).reversed()
-                .thenComparingInt(Participant::getPenalty).thenComparing(Participant::getName);
+            Comparator.comparingInt(Participant::getScore).reversed()
+                    .thenComparingInt(Participant::getPenalty).thenComparing(Participant::getName);
 
-    public static void heapSort(ArrayList<Participant> participants) {
-        ArrayList<Participant> heap = new ArrayList<>();
-        for (int i = 1; i < participants.size() ; i++) {
-            heapAdd(heap, participants.get(i));
+    public static void sort(Participant[] arr)
+    {
+        int n = arr.length;
+
+        for (int i = n / 2 - 1; i >= 0; i--)
+            siftDown(arr, n, i);
+
+        for (int i = n - 1; i > 0; i--) {
+            Participant temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            siftDown(arr, i, 0);
         }
-        ArrayList<Participant> sortedParticipants = new ArrayList<>();
-        int i = 0;
-        while (heap.size() > 0) {
-            sortedParticipants.set(i, popMax(heap));
-            i++;
-        }
-        participants.clear();
-        participants.addAll(sortedParticipants);
     }
 
-    public static void heapAdd(ArrayList<Participant> heap, Participant participant) {
-        int index = heap.size() + 1;
-        heap.set(index, participant);
-        siftUp(heap, index);
-    }
+    static void siftDown(Participant[] arr, int n, int index)
+    {
+        int indexLargest = index;
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
 
-    public static int siftUp(ArrayList<Participant> heap, int index) {
-        if (index == 1) {
-            return index;
-        }
-        int parentIndex = index / 2;
-        if (comp.compare(heap.get(parentIndex), heap.get(index)) < 0) {
-            Participant temp = heap.get(parentIndex);
-            heap.set(parentIndex, heap.get(index));
-            heap.set(index, temp);
-            index = siftUp(heap, parentIndex);
-        }
-        return index;
-    }
-
-    public static Participant popMax(ArrayList<Participant> heap) {
-        Participant result = heap.get(1);
-        heap.set(1, heap.get(heap.size() - 1));
-        siftDown(heap, 1);
-        return result;
-    }
-
-    public static int siftDown(ArrayList<Participant> heap, int index) {
-        int left = 2 * index;
-        int right = 2 * index + 1;
-        int n = heap.size() - 1;
-        int indexLargest;
-        if (n < left) {
-            return index;
-        }
-        if ((right <= n) && (comp.compare(heap.get(left), heap.get(right)) < 0)) {
-            indexLargest = right;
-        } else {
+        if (left < n && comp.compare(arr[left], arr[indexLargest]) > 0)
             indexLargest = left;
+
+        if (right < n && comp.compare(arr[right], arr[indexLargest]) > 0)
+            indexLargest = right;
+
+        if (indexLargest != index) {
+            Participant swap = arr[index];
+            arr[index] = arr[indexLargest];
+            arr[indexLargest] = swap;
+
+            siftDown(arr, n, indexLargest);
         }
-        if (comp.compare(heap.get(index), heap.get(indexLargest)) < 0) {
-            Participant temp = heap.get(index);
-            heap.set(index, heap.get(indexLargest));
-            heap.set(indexLargest, temp);
-            index = siftDown(heap, indexLargest);
-        }
-        return index;
     }
+
+    static void printArray(Participant[] arr)
+    {
+        StringBuilder out = new StringBuilder();
+        for (Participant participant : arr) {
+            out.append(participant.getName()).append("\n");
+        }
+        out.setLength(out.length() - 1);
+        System.out.println(out);
+
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(reader.readLine());
         if (n < 1 || n > 100000) {
             throw new Exception("Wrong n");
         }
-        ArrayList<Participant> participants = new ArrayList<>();
-        for (int i = 1; i < n; i++) {
+        Participant[] participants = new Participant[n];
+        for (int i = 0; i < n; i++) {
             String[] participant = reader.readLine().split(" ");
             int score = Integer.parseInt(participant[1]);
             int penalty = Integer.parseInt(participant[2]);
-            participants.set(i, new Participant(participant[0], score, penalty));
+            if (score < 0 || score > 1000000000) {
+                throw new Exception("Wrong score");
+            }
+            if (penalty < 0 || penalty > 1000000000) {
+                throw new Exception("Wrong penalty");
+            }
+            participants[i] = new Participant(participant[0], score, penalty);
         }
-        heapSort(participants);
-        participants
-                .forEach(par -> System.out.println(par.getName()));
+        sort(participants);
+        printArray(participants);
     }
-
 }

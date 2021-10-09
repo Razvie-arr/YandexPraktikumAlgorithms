@@ -1,3 +1,18 @@
+/*
+https://contest.yandex.ru/contest/24414/run-report/52884100/
+-- ПРИНЦИП РАБОТЫ --
+Реализован класс MyHashMap, который воспроизводит работу HashMap в Java, и имеющий методы put, get и delete.
+С помощью метода put в переменную table (которая состоит из элементов класса Entry) кладется введенная пара ключ-значение.
+Метод get позволяет вытащить значение по ключу, а delete выводит значение элемента по ключу и удаляет данный элемент.
+
+-- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+Все операции выполняются за О(1) в среднем
+
+-- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+Хеш-таблица потребляет O(n) памяти
+
+ */
+
 package com.company.sprint4.Final;
 
 import java.io.BufferedReader;
@@ -113,7 +128,7 @@ class MyHashMap {
 }
 
 
-public class Final1 {
+public class HashTable {
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder output = new StringBuilder();
