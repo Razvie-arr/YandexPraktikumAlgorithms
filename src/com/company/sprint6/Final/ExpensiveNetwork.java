@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 class ExpensiveGraph {
-    Map<Integer, List<List<Integer>>> graph;
+    private final Map<Integer, List<List<Integer>>> graph;
     public ExpensiveGraph(int n) {
         this.graph = new HashMap<>(n);
     }
@@ -17,7 +17,6 @@ class ExpensiveGraph {
     }
 
     public void addEdge(int from, int to, int weight) {
-
         if (!graph.containsKey(from))
             addVertex(from);
         if (!graph.containsKey(to))
@@ -25,22 +24,28 @@ class ExpensiveGraph {
         graph.get(from).add(new ArrayList<>(Arrays.asList(to, weight)));
         graph.get(to).add(new ArrayList<>(Arrays.asList(from, weight)));
     }
+    public Set<Integer> getGraphKeys() {
+        return graph.keySet();
+    }
+
+    public Map<Integer, List<List<Integer>>> getGraph() {
+        return graph;
+    }
 
     public List<List<Integer>> getEdges(int vertex) {
         return graph.get(vertex);
     }
 }
 public class ExpensiveNetwork {
-    public static void addVertex(int vertex, List<Integer> added, Set<Integer> notAdded, List<Integer> edges) {
+    public static void addVertex(int vertex, List<Integer> added, Set<Integer> notAdded, List<Integer> edges, ExpensiveGraph graph) {
         added.add(vertex);
         notAdded.remove(vertex);
-
     }
 
-    public static int getMinimumSpanningTree(Map<Integer, List<List<Integer>>> graph, int n) {
+    public static int getMinimumSpanningTree(ExpensiveGraph graph, int n) {
         List<Integer> edges = new ArrayList<>();
         List<Integer> added = new ArrayList<>(n);
-        Set<Integer> notAdded = new HashSet<>(graph.keySet());
+        Set<Integer> notAdded = new HashSet<>(graph.getGraphKeys());
         return 0;
     }
 
