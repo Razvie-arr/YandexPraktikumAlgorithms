@@ -9,15 +9,12 @@ import java.util.List;
 class Graph {
 
     private final int V;
-    private final List<List<Integer>> adj;
+    private final Character[][] ways;
 
-    public Graph(int V)
+    public Graph(int V, Character[][] ways)
     {
         this.V = V;
-        adj = new LinkedList<>();
-
-        for (int i = 0; i < V; i++)
-            adj.add(new LinkedList<>());
+        this.ways = ways;
     }
 
     private boolean isCyclicUtil(int i, boolean[] visited,
@@ -35,20 +32,20 @@ class Graph {
         visited[i] = true;
 
         recStack[i] = true;
-        List<Integer> children = adj.get(i);
 
-        for (Integer c: children)
-            if (isCyclicUtil(c, visited, recStack))
-                return true;
+        Character[] childs = ways[i];
+
+        for (int j = 0; j < childs.length; j++) {
+            if (childs[j] != null) {
+                isCyclicUtil(j, visited, recStack);
+            }
+        }
 
         recStack[i] = false;
 
         return false;
     }
 
-    private void addEdge(int source, int dest) {
-        adj.get(source).add(dest);
-    }
 
     // Returns true if the graph contains a
     // cycle, else false.
@@ -75,18 +72,20 @@ class Graph {
         public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(reader.readLine());
-        Graph graph = new Graph(n);
-        for (int i = 0; i < n - 1; i++) {
+        Character[][] ways = new Character[n][n];
+        //представляем пути как матрицу
+        for (int i = 0; i < n; i++) {
             String way = reader.readLine();
             for (int j = 0; j < way.length(); j++) {
                 char path = way.charAt(j);
                 if (path == 'R') {
-                    graph.addEdge(i, i + 1 + j);
+                    ways[i][i + 1 + j] = way.charAt(j);
                 } else {
-                    graph.addEdge(i + 1 + j, i);
+                    ways[i + 1 + j][i] = way.charAt(j);
                 }
             }
         }
+        Graph graph = new Graph(n, ways);
         if (graph.isCyclic())
             System.out.println("NO");
         else
