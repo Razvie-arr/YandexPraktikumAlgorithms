@@ -1,13 +1,34 @@
-package com.company.sprint6.Final;// A Java Program to detect cycle in a graph
+/*
+https://contest.yandex.ru/contest/25070/run-report/55113851/
+-- ПРИНЦИП РАБОТЫ --
+В обсуждениях Slack увидел отличную идею: при формировании графа можно менять направление ребра.
+Представляем граф как матрицу, это позволило в несколько раз ускорить алгоритм и сэкономить память.
+Если дорога имеет тип 'R', кладем ее в матрицу в обычном направлении, если имеет тип 'B' переворачиваем ребро.
+Это позволяет нам найти путь от точки А до точки Б с разными типами дорог с помощью простого поиска цикла в графе: если граф имеет цикл, то можно определенно
+назвать его неоптимальным.
+
+-- ВРЕМЕННАЯ СЛОЖНОСТЬ --
+Сложность как в DFS: проверяем каждое ребро каждой вершины O(V + E)
+
+-- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
+O(V^2) - храним все ребра в виде матрицы
+O(V) - храним состояние каждой вершины в visited
+O(V) - храним состояние каждой проверки вершины
+
+Получаем O(V^2 + 2 * V)
+ */
+
+package com.company.sprint6.Final;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 class Graph {
-
+    public enum VertexState {
+        VISITED,
+        RecSTACK,
+    }
     private final int V;
     private final Character[][] ways;
 
@@ -17,64 +38,46 @@ class Graph {
         this.ways = ways;
     }
 
-    private boolean isCyclicUtil(int i, boolean[] visited,
-                                 boolean[] recStack)
-    {
-
-        // Mark the current node as visited and
-        // part of recursion stack
-        if (recStack[i])
+    private boolean isCyclicUtil(int i, ArrayList<ArrayList<VertexState>> state) {
+        if (state.get(i).contains(VertexState.RecSTACK))
             return true;
-
-        if (visited[i])
+        if (state.get(i).contains(VertexState.VISITED))
             return false;
-
-        visited[i] = true;
-
-        recStack[i] = true;
-
+        //каждая вершина хранит до двух состояний одновременно
+        state.get(i).add(VertexState.VISITED);
+        state.get(i).add(VertexState.RecSTACK);
         Character[] childs = ways[i];
-
         for (int j = 0; j < childs.length; j++) {
             if (childs[j] != null) {
-                isCyclicUtil(j, visited, recStack);
+                if (isCyclicUtil(j, state)) {
+                    return true;
+                }
             }
         }
 
-        recStack[i] = false;
-
+        state.get(i).remove(VertexState.RecSTACK);
         return false;
     }
 
-
-    // Returns true if the graph contains a
-    // cycle, else false.
-    // This function is a variation of DFS() in
-    // https://www.geeksforgeeks.org/archives/18212
     private boolean isCyclic()
     {
+        ArrayList<ArrayList<VertexState>> state = new ArrayList<>(V);
+//        boolean[] visited = new boolean[V];
+//        boolean[] recStack = new boolean[V];
 
-        // Mark all the vertices as not visited and
-        // not part of recursion stack
-        boolean[] visited = new boolean[V];
-        boolean[] recStack = new boolean[V];
-
-
-        // Call the recursive helper function to
-        // detect cycle in different DFS trees
         for (int i = 0; i < V; i++)
-            if (isCyclicUtil(i, visited, recStack))
+            if (isCyclicUtil(i, state))
                 return true;
 
         return false;
     }
 
-        public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(reader.readLine());
         Character[][] ways = new Character[n][n];
         //представляем пути как матрицу
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n - 1; i++) {
             String way = reader.readLine();
             for (int j = 0; j < way.length(); j++) {
                 char path = way.charAt(j);
