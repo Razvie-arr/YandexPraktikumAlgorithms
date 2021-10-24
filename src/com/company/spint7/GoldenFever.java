@@ -6,25 +6,25 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 class Heap implements Comparable<Heap> {
-    private final int costOfKilogram;
-    private final int kilograms;
+    private final long costOfKilogram;
+    private final long kilograms;
 
-    public Heap(int costOfKilogram, int kilograms) {
+    public Heap(long costOfKilogram, long kilograms) {
         this.costOfKilogram = costOfKilogram;
         this.kilograms = kilograms;
     }
 
-    public int getCostOfKilogram() {
+    public long getCostOfKilogram() {
         return costOfKilogram;
     }
 
-    public int getKilograms() {
+    public long getKilograms() {
         return kilograms;
     }
 
     @Override
     public int compareTo(Heap heap) {
-        return Integer.compare(this.costOfKilogram, heap.getCostOfKilogram());
+        return Long.compare(this.costOfKilogram, heap.getCostOfKilogram());
     }
 }
 
@@ -36,18 +36,18 @@ public class GoldenFever {
         List<Heap> heaps = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             StringTokenizer tokenizer = new StringTokenizer(reader.readLine(), " ");
-            int costOfKilogram = Integer.parseInt(tokenizer.nextToken());
-            int kilograms = Integer.parseInt(tokenizer.nextToken());
+            long costOfKilogram = Integer.parseInt(tokenizer.nextToken());
+            long kilograms = Integer.parseInt(tokenizer.nextToken());
             heaps.add(new Heap(costOfKilogram, kilograms));
         }
         System.out.println(getMaxSum(heaps, M));
     }
 
-    public static int getMaxSum(List<Heap> heaps, int M) {
+    public static long getMaxSum(List<Heap> heaps, int M) {
         Collections.sort(heaps);
         Collections.reverse(heaps);
-        int kg = 0;
-        int sum = 0;
+        long kg = 0;
+        long sum = 0;
         for (Heap heap : heaps) {
             if (kg < M) {
                 for (int j = 0; j < heap.getKilograms(); j++) {

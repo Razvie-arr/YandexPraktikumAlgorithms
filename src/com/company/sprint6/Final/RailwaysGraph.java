@@ -1,5 +1,5 @@
 /*
-https://contest.yandex.ru/contest/25070/run-report/55113851/
+https://contest.yandex.ru/contest/25070/run-report/55310369/
 -- ПРИНЦИП РАБОТЫ --
 В обсуждениях Slack увидел отличную идею: при формировании графа можно менять направление ребра.
 Представляем граф как матрицу, это позволило в несколько раз ускорить алгоритм и сэкономить память.
@@ -11,23 +11,21 @@ https://contest.yandex.ru/contest/25070/run-report/55113851/
 Сложность как в DFS: проверяем каждое ребро каждой вершины O(V + E)
 
 -- ПРОСТРАНСТВЕННАЯ СЛОЖНОСТЬ --
-O(V^2) - храним все ребра в виде матрицы
-O(V) - храним состояние каждой вершины в visited
-O(V) - храним состояние каждой проверки вершины
+O(V^2) - храним матрицу n * n
+O(V) - храним состояние каждой вершины в VertexState
 
-Получаем O(V^2 + 2 * V)
+Получаем O(V^2 + V)
  */
 
 package com.company.sprint6.Final;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 class Graph {
     public enum VertexState {
         VISITED,
-        RecSTACK,
+        RecSTACK
     }
     private final int V;
     private final Character[][] ways;
@@ -38,14 +36,12 @@ class Graph {
         this.ways = ways;
     }
 
-    private boolean isCyclicUtil(int i, ArrayList<ArrayList<VertexState>> state) {
-        if (state.get(i).contains(VertexState.RecSTACK))
+    private boolean isCyclicUtil(int i, VertexState[] state) {
+        if (state[i] == VertexState.RecSTACK)
             return true;
-        if (state.get(i).contains(VertexState.VISITED))
+        if (state[i] == VertexState.VISITED)
             return false;
-        //каждая вершина хранит до двух состояний одновременно
-        state.get(i).add(VertexState.VISITED);
-        state.get(i).add(VertexState.RecSTACK);
+        state[i] = VertexState.RecSTACK;
         Character[] childs = ways[i];
         for (int j = 0; j < childs.length; j++) {
             if (childs[j] != null) {
@@ -55,16 +51,13 @@ class Graph {
             }
         }
 
-        state.get(i).remove(VertexState.RecSTACK);
+        state[i] = VertexState.VISITED;
         return false;
     }
 
     private boolean isCyclic()
     {
-        ArrayList<ArrayList<VertexState>> state = new ArrayList<>(V);
-//        boolean[] visited = new boolean[V];
-//        boolean[] recStack = new boolean[V];
-
+        VertexState[] state = new VertexState[V];
         for (int i = 0; i < V; i++)
             if (isCyclicUtil(i, state))
                 return true;
