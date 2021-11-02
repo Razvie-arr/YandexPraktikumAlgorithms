@@ -34,16 +34,19 @@ class LCS {
         return dp[n][m];
     }
 
-    public void getLCSPath() {
+    public void printLCSPath() {
         if (dp[n][m] > 0) {
             int index = dp[n][m];
             int[] lcs = new int[index];
-            StringBuilder out = new StringBuilder();
             int i = n;
             int j = m;
+            StringBuilder firstIndexes = new StringBuilder();
+            StringBuilder secondIndexes = new StringBuilder();
             while (i > 0 && j > 0) {
                 if (firstSubsequence[i - 1] == secondSubsequence[j - 1]) {
                     lcs[index - 1] = firstSubsequence[i - 1];
+                    firstIndexes.append(i).append(" ");
+                    secondIndexes.append(j).append(" ");
                     i--;
                     j--;
                     index--;
@@ -53,10 +56,14 @@ class LCS {
                     j--;
                 }
             }
+            firstIndexes.delete(firstIndexes.length() - 1, firstIndexes.length());
+            secondIndexes.delete(secondIndexes.length() - 1, secondIndexes.length());
+            System.out.println(firstIndexes.reverse());
+            System.out.println(secondIndexes.reverse());
         }
     }
 
-    public class Horoscopes {
+    public static class Horoscopes {
         public static void main(String[] args) throws IOException {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int n = Integer.parseInt(reader.readLine());
@@ -73,7 +80,7 @@ class LCS {
             }
             LCS lcs = new LCS(firstSubsequence, secondSubsequence, n, m);
             System.out.println(lcs.computeLCS());
-            lcs.getLCSPath();
+            lcs.printLCSPath();
         }
     }
 }
