@@ -3,57 +3,74 @@ package com.company.sprint8;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.StringTokenizer;
+import java.util.*;
+class Pair implements Comparable<Pair> {
+    private final String s;
+    private final int index;
+    public Pair(String s, int index) {
+        this.s = s;
+        this.index = index;
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    @Override
+    public int compareTo(Pair pair) {
+        return Integer.compare(this.getIndex(), pair.getIndex());
+    }
+}
 
 public class StringsInsert {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String s = reader.readLine();
         int n = Integer.parseInt(reader.readLine());
-        HashMap<String, Integer> giftedStrings = new HashMap<>(n);
+        List<Pair> giftedStrings = new ArrayList<>(n);
+        long startFillingPairs = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
             StringTokenizer giftTokenizer = new StringTokenizer(reader.readLine(), " ");
-            giftedStrings.put(giftTokenizer.nextToken(), Integer.parseInt(giftTokenizer.nextToken()));
+            giftedStrings.add(new Pair(giftTokenizer.nextToken(), Integer.parseInt(giftTokenizer.nextToken())));
         }
-
-    }
-    /*
-    функция insert(string, index, substring):
-    length = длина(string)
-    shift = длина(substring)
-    если index > length: # index == length - край строки
-        ошибка! нет такой позиции
-    расширить область памяти строки до размера length + shift
-    если length > 0:
-        # Если length == 0, делать сдвиг нет смысла.
-        # Кроме того, не следует в вычислениях писать (length - 1),
-        #   не проверив, что индекс не ноль.
-        # В некоторых языках длина представляется беззнаковым целым числом,
-        #   в таком случае (length - 1) будет равен не -1, а числу MAX_INT,
-        #   и цикл станет некорректным. Мы этого избегаем.
-        для i от (length - 1) до index включительно, с шагом -1:
-            string[shift + i] = string[i]
-
-    для i от 0 до (shift - 1):
-        string[index + i] = substring[i]
-
-     */
-    public static void printStringWithGifts(String string, HashMap<String, Integer> gifts, int n) {
-
+        long endFillingPairs = System.currentTimeMillis();
+        System.out.println("fillingPairsTime: " + (endFillingPairs - startFillingPairs));
+        printStringWithGifts(s, giftedStrings, n);
     }
 
-    public static String insert(String string, int index, String substring) {
+    public static void printStringWithGifts(String string, List<Pair> gifts, int n) {
+        int insertedCounter = 0;
+        long startSortTime = System.currentTimeMillis();
+        Collections.sort(gifts);
+        long endSortTime = System.currentTimeMillis();
+        System.out.println("SortTime: " + (endSortTime - startSortTime));
+        long startInsertTime = System.currentTimeMillis();
+        for (int i = 0; i < n; i++) {
+            String giftedString = gifts.get(i).getS();
+            string = insert(string, gifts.get(i).getIndex(), giftedString, insertedCounter);
+            insertedCounter += giftedString.length();
+        }
+        long endInsertTime = System.currentTimeMillis();
+        System.out.println("InsertTime: " + (endInsertTime - startInsertTime));
+        System.out.println(string);
+    }
+
+    public static String insert(String string, int index, String substring, int insertedCounter) {
         int length = string.length();
         int shift = substring.length();
         if (index > length) {
             return null;
         }
         StringBuilder stringSB = new StringBuilder(string);
-        if (length > 0) {
-            for (int i = length -1; i <= index ; i++) {
-                stringSB.replace(shift + i, i, String.valueOf(string.charAt(i)));
-            }
+        StringBuilder insertSB = new StringBuilder();
+        for (int i = 0; i <= shift - 1; i++) {
+            insertSB.append(substring.charAt(i));
         }
+        stringSB.insert(index + insertedCounter, insertSB);
+        return stringSB.toString();
     }
 }
