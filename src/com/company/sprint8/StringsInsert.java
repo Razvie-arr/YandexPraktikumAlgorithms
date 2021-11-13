@@ -1,8 +1,6 @@
 package com.company.sprint8;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 class Pair implements Comparable<Pair> {
     private final String s;
@@ -28,10 +26,12 @@ class Pair implements Comparable<Pair> {
 
 public class StringsInsert {
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader reader = new BufferedReader(new FileReader("/Users/byastinov/IdeaProjects/yandex_praktikum_algorithms/src/com/company/sprint8/testcopy.txt"));
         String s = reader.readLine();
         int n = Integer.parseInt(reader.readLine());
         List<Pair> giftedStrings = new ArrayList<>(n);
+//        Map<String, Integer> giftedMap = new LinkedHashMap<>(n);
         long startFillingPairs = System.currentTimeMillis();
         for (int i = 0; i < n; i++) {
             StringTokenizer giftTokenizer = new StringTokenizer(reader.readLine(), " ");
@@ -42,7 +42,7 @@ public class StringsInsert {
         printStringWithGifts(s, giftedStrings, n);
     }
 
-    public static void printStringWithGifts(String string, List<Pair> gifts, int n) {
+    public static void printStringWithGifts(String string, List<Pair> gifts, int n) throws IOException {
         int insertedCounter = 0;
         long startSortTime = System.currentTimeMillis();
         Collections.sort(gifts);
@@ -56,7 +56,12 @@ public class StringsInsert {
         }
         long endInsertTime = System.currentTimeMillis();
         System.out.println("InsertTime: " + (endInsertTime - startInsertTime));
-        System.out.println(string);
+        long startOutTime = System.currentTimeMillis();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        writer.write(string);
+        writer.flush();
+        long endOutTime = System.currentTimeMillis();
+        System.out.println("SOUT Time: " + (endOutTime - startOutTime));
     }
 
     public static String insert(String string, int index, String substring, int insertedCounter) {
